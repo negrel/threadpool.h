@@ -33,12 +33,6 @@
 #include <stdatomic.h>
 #include <stdbool.h>
 
-#if defined(__GNUC__) || defined(__clang__)
-#define NONNULL __attribute__((nonnull))
-#else
-#define NONNULL
-#endif
-
 #ifndef TPOOL_DEFAULT_STACK_SIZE
 #define TPOOL_DEFAULT_STACK_SIZE (16 * 1024 * 1024)
 #endif /* TPOOL_DEFAULT_STACK_SIZE */
@@ -78,7 +72,7 @@ struct tpool_batch tpool_batch_from_task(struct tpool_task *t);
 /**
  * Push another batch into this batch, taking ownership of its tasks.
  */
-void tpool_batch_push(struct tpool_batch *b NONNULL, struct tpool_batch o);
+void tpool_batch_push(struct tpool_batch *b, struct tpool_batch o);
 
 /**
  * A thread part of the pool. This is a private structure, use at your own risk.
@@ -126,7 +120,7 @@ void tpool_deinit(struct tpool *t);
  * thread limit isn't reached a new thread is spawned. In case of failure,
  * negative error code of pthread_create() is returned.
  */
-int tpool_schedule(struct tpool *t NONNULL, struct tpool_batch b);
+int tpool_schedule(struct tpool *t, struct tpool_batch b);
 
 #ifdef THREADPOOL_IMPLEMENTATION
 

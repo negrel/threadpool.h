@@ -8,9 +8,10 @@
 	do {                                                                   \
 		int err = fn();                                                \
 		if (err) {                                                     \
-			printf("%s return non zero exit code: %d\n", #fn,      \
-			       err);                                           \
+			printf("%s ko: %d\n", #fn, err);                       \
 			return err;                                            \
+		} else {                                                       \
+			printf("%s ok\n", #fn);                                \
 		}                                                              \
 	} while (0);
 
@@ -55,7 +56,9 @@ static int single_task(void)
 
 int main(void)
 {
+	printf("executing tests...\n");
 	TRY(init_deinit);
 	TRY(single_task);
+	printf("all tests are ok\n");
 	return 0;
 }
