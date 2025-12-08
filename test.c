@@ -38,7 +38,7 @@ static void task_work(struct tpool_task *tt)
 static int single_task(void)
 {
 	struct tpool tpool = {0};
-	atomic_int counter;
+	atomic_int counter = 0;
 	struct task t = {0};
 	struct tpool_batch b = {0};
 
@@ -51,7 +51,11 @@ static int single_task(void)
 	tpool_schedule(&tpool, b);
 	tpool_deinit(&tpool);
 
-	return atomic_load(&counter) == 1;
+	if (counter != 1) {
+		printf("expected 1, got %d\n", counter);
+		return 1;
+	}
+	return 0;
 }
 
 int main(void)
