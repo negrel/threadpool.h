@@ -1,6 +1,4 @@
 {
-  description = "Single header thread pool library in plain C.";
-
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -8,11 +6,10 @@
 
   outputs =
     {
-      self,
       nixpkgs,
       flake-utils,
       ...
-    }@inputs:
+    }:
     let
       outputsWithoutSystem = { };
       outputsWithSystem = flake-utils.lib.eachDefaultSystem (
@@ -21,12 +18,23 @@
           pkgs = import nixpkgs {
             inherit system;
           };
-          lib = pkgs.lib;
         in
         {
           devShells = {
             default = pkgs.mkShell {
               buildInputs = with pkgs; [ clang-tools ];
+            };
+          };
+          packages = {
+            default = derivation {
+              name = "threadpool.h";
+              version = "0.1.0";
+              system = system;
+              builder = "${pkgs.bash}/bin/bash";
+              args = [
+                "-c"
+                "${pkgs.coreutils}/bin/mkdir -p $out/include; ${pkgs.coreutils}/bin/cp ${./threadpool.h} $out/include/threadpool.h"
+              ];
             };
           };
         }
