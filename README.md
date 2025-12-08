@@ -1,4 +1,4 @@
-# `threadpool.h` - Single header thread pool library in plain C.
+# `threadpool.h` - Single header thread pool library in plain C11.
 
 ## Contributing
 
