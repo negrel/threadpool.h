@@ -8,10 +8,10 @@
 	do {                                                                   \
 		int err = fn();                                                \
 		if (err) {                                                     \
-			printf("%s ko: %d\n", #fn, err);                       \
+			printf("KO	%s: %d\n", #fn, err);                  \
 			return err;                                            \
 		} else {                                                       \
-			printf("%s ok\n", #fn);                                \
+			printf("OK	%s\n", #fn);                           \
 		}                                                              \
 	} while (0);
 

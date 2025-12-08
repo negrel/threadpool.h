@@ -13,10 +13,15 @@ cc() {
 	$CC $CFLAGS $LDFLAGS $@
 }
 
+execute() {
+	echo "EXEC	$@"
+	$@
+}
+
 case "${1:-test}" in
 	test)
 		cc test.c -o test
-		timeout 3s ./test
+		execute timeout 3s ./test
 		;;
 
 	compile_flags.txt)
