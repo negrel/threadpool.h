@@ -183,6 +183,8 @@ void tpool_deinit(struct tpool *t)
 
 	while (atomic_load(&t->threads_count) > 0)
 		sched_yield();
+
+	pthread_cond_destroy(&t->cond);
 }
 
 /**
