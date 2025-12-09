@@ -209,7 +209,7 @@ static void *tpool_thread_main(void *ptr)
 		struct tpool_task *task = tpool_batch_pop(&t->work_queue);
 		pthread_mutex_unlock(&t->mu);
 
-		if (task)
+		if (task != NULL)
 			(*task->work)(task);
 	}
 
