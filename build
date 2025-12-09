@@ -21,7 +21,7 @@ execute() {
 case "${1:-test}" in
 	test)
 		cc test.c -o test
-		execute timeout 3s ./test
+		execute valgrind timeout 3s ./test
 		;;
 
 	compile_flags.txt)

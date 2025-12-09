@@ -13,7 +13,7 @@
 		} else {                                                       \
 			printf("OK	%s\n", #fn);                           \
 		}                                                              \
-	} while (0);
+	} while (0)
 
 static int init_deinit(void)
 {

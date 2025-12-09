@@ -22,7 +22,10 @@
         {
           devShells = {
             default = pkgs.mkShell {
-              buildInputs = with pkgs; [ clang-tools ];
+              buildInputs = with pkgs; [
+                clang-tools
+                valgrind
+              ];
             };
           };
           packages = {
