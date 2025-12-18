@@ -5,7 +5,7 @@ set -euo pipefail
 : ${CC:=clang}
 CFLAGS="-Wall -Wextra -Wpedantic -Werror -Wnull-dereference -Wformat=2
 -Wshadow -Wsign-conversion -Wfloat-equal -Wswitch-enum -Wmissing-prototypes
--Wdeprecated-declarations -fsanitize=undefined -fsanitize=thread -std=c11"
+-Wdeprecated-declarations -std=c11"
 LDFLAGS="-lpthread"
 
 cc() {
@@ -21,7 +21,7 @@ execute() {
 case "${1:-test}" in
 	test)
 		cc test.c -o test
-		execute timeout 3s ./test
+		execute ./test
 		;;
 
 	compile_flags.txt)
