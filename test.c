@@ -58,11 +58,45 @@ static int single_task(void)
 	return 0;
 }
 
+static int thousand_tasks(void)
+{
+	struct tpool tpool = {0};
+	atomic_int counter = 0;
+	struct task tasks[1000];
+	struct tpool_batch batch = {0};
+	struct tpool_batch b = {0};
+
+	tpool_init(&tpool, (struct tpool_config){.threads_max = 8});
+
+	for (int i = 0; i < 1000; i++) {
+		struct task *t = &tasks[i];
+		t->counter = &counter;
+		t->inner.work = task_work;
+
+		b = tpool_batch_from_task(&t->inner);
+
+		if (i == 0)
+			batch = b;
+		else
+			tpool_batch_push(&batch, b);
+	}
+
+	tpool_schedule(&tpool, batch);
+	tpool_deinit(&tpool);
+
+	if (counter != 1000) {
+		printf("expected 1, got %d\n", counter);
+		return 1;
+	}
+	return 0;
+}
+
 int main(void)
 {
 	printf("executing tests...\n");
 	TRY(init_deinit);
 	TRY(single_task);
+	TRY(thousand_tasks);
 	printf("all tests are ok\n");
 	return 0;
 }
