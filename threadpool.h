@@ -111,7 +111,8 @@ struct tpool {
 void tpool_init(struct tpool *t, struct tpool_config cfg);
 
 /**
- * Deinitializes a thread pool and clean up all threads.
+ * Deinitializes a thread pool and clean up all threads. This function blocks
+ * until all executing tasks are done.
  */
 void tpool_deinit(struct tpool *t);
 
@@ -199,7 +200,8 @@ static void *tpool_thread_main(void *ptr)
 		if (t->work_queue.size == 0) {
 			if (t->done) {
 				atomic_fetch_sub(&t->threads_count, 1);
-				break;
+				pthread_mutex_unlock(&t->mu);
+				return NULL;
 			}
 			atomic_fetch_add(&t->threads_idle, 1);
 			pthread_cond_wait(&t->cond, &t->mu);
@@ -212,8 +214,6 @@ static void *tpool_thread_main(void *ptr)
 		if (task != NULL)
 			(*task->work)(task);
 	}
-
-	return NULL;
 }
 
 int tpool_schedule(struct tpool *t, struct tpool_batch b)
